@@ -17,6 +17,8 @@ import java.util.Map;
  *
  * @author hcadavid
  */
+
+@Component("inMemoryBlueprintsPersistence")
 public class InMemoryBlueprintPersistence implements BlueprintsPersistence{
 
     private final Map<Tuple<String,String>,Blueprint> blueprints=new HashMap<>();

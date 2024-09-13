@@ -23,6 +23,16 @@ import org.junit.Test;
  */
 public class InMemoryPersistenceTest {
 
+    /**
+     * Prueba la funcionalidad de guardar y cargar un nuevo blueprint.
+     * 
+     * Este test verifica que un blueprint recién guardado se puede cargar correctamente 
+     * desde la persistencia en memoria. Se asegura de que el blueprint cargado no sea null
+     * y que sea el mismo que el que se guardó.
+     * 
+     * @throws BlueprintPersistenceException si ocurre un error al guardar el blueprint.
+     * @throws BlueprintNotFoundException si ocurre un error al recuperar el blueprint.
+     */
     @Test
     public void guardarYCargarNuevoBlueprintTest() throws BlueprintPersistenceException, BlueprintNotFoundException {
         InMemoryBlueprintPersistence ibpp = new InMemoryBlueprintPersistence();
@@ -37,11 +47,20 @@ public class InMemoryPersistenceTest {
 
         ibpp.saveBlueprint(bp);
 
+        // Verifica que el blueprint se ha cargado correctamente
         assertNotNull("Cargar un blueprint previamente almacenado devolvió null.", ibpp.getBlueprint(bp.getAuthor(), bp.getName()));
 
+        // Verifica que el blueprint cargado es el mismo que el guardado
         assertEquals("Cargar un blueprint previamente almacenado devolvió un blueprint diferente.", ibpp.getBlueprint(bp.getAuthor(), bp.getName()), bp);
     }
 
+    /**
+     * Prueba la funcionalidad de guardar un blueprint existente con el mismo nombre y autor.
+     * 
+     * Este test verifica que se lanza una excepción al intentar guardar un segundo blueprint
+     * con el mismo nombre y autor que un blueprint ya existente. Esto asegura que la persistencia
+     * no permita duplicados de blueprints con el mismo nombre y autor.
+     */
     @Test
     public void guardarBlueprintExistenteTest() {
         InMemoryBlueprintPersistence ibpp = new InMemoryBlueprintPersistence();
@@ -59,6 +78,7 @@ public class InMemoryPersistenceTest {
         Blueprint bp2 = new Blueprint("john", "thepaint", pts2);
 
         try {
+            // Intento de guardar un blueprint con el mismo nombre y autor
             ibpp.saveBlueprint(bp2);
             fail("Se esperaba una excepción después de guardar un segundo blueprint con el mismo nombre y autor.");
         } catch (BlueprintPersistenceException ex) {
@@ -66,6 +86,16 @@ public class InMemoryPersistenceTest {
         }
     }
 
+    /**
+     * Prueba la funcionalidad de obtener blueprints por autor.
+     * 
+     * Este test verifica que se pueden recuperar todos los blueprints asociados a un autor específico.
+     * Se asegura de que el número de blueprints recuperados y los blueprints en sí sean correctos
+     * para el autor dado.
+     * 
+     * @throws BlueprintPersistenceException si ocurre un error al guardar el blueprint.
+     * @throws BlueprintNotFoundException si ocurre un error al recuperar el blueprint.
+     */
     @Test
     public void obtenerBlueprintPorAutorTest() throws BlueprintPersistenceException, BlueprintNotFoundException {
         InMemoryBlueprintPersistence ibpp = new InMemoryBlueprintPersistence();
@@ -81,16 +111,26 @@ public class InMemoryPersistenceTest {
 
         Set<Blueprint> blueprints = ibpp.getBlueprintsByAuthor("john");
 
+        // Verifica el número de blueprints recuperados para el autor
         assertEquals("Número de blueprints para el autor 'john' es incorrecto.", 2, blueprints.size());
+        // Verifica que los blueprints correctos están en el conjunto
         assertTrue("El blueprint 'thepaint1' debería estar en el conjunto.", blueprints.contains(bp1));
         assertTrue("El blueprint 'thepaint2' debería estar en el conjunto.", blueprints.contains(bp2));
     }
 
+    /**
+     * Prueba la funcionalidad de obtener blueprints por un autor no existente.
+     * 
+     * Este test verifica que se lanza una excepción al intentar obtener blueprints de un autor
+     * que no existe en la persistencia. Esto asegura que la búsqueda de blueprints por autor maneje
+     * correctamente los casos en los que el autor no tiene blueprints.
+     */
     @Test
     public void obtenerBlueprintPorAutorNoExistenteTest() {
         InMemoryBlueprintPersistence ibpp = new InMemoryBlueprintPersistence();
 
         try {
+            // Intento de obtener blueprints de un autor no existente
             ibpp.getBlueprintsByAuthor("noexistente");
             fail("Se esperaba una excepción al consultar blueprints de un autor no existente.");
         } catch (BlueprintNotFoundException ex) {

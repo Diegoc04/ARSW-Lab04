@@ -15,10 +15,14 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  */
 public class Main {
 
-    public static void main(String a[]) {
+    public static void main(String[] args) {
+        //Cargar el contexto de Spring desde el archivo applicationContext.xml
         ApplicationContext ac = new ClassPathXmlApplicationContext("applicationContext.xml");
+        
+        //Obtener el bean GrammarChecker del contexto de Spring
         GrammarChecker gc = ac.getBean(GrammarChecker.class);
+        
+        //Usar el GrammarChecker para verificar el texto
         System.out.println(gc.check("la la la "));
     }
-
 }

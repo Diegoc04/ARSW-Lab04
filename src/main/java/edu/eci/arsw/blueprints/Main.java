@@ -1,4 +1,4 @@
-package edu.eci.arsw.blueprints.main;
+package edu.eci.arsw.blueprints;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;

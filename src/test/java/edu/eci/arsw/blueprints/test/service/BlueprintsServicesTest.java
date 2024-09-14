@@ -3,20 +3,29 @@ package edu.eci.arsw.blueprints.test.service;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
-
 import edu.eci.arsw.blueprints.model.Blueprint;
+import edu.eci.arsw.blueprints.model.Point;
+import edu.eci.arsw.blueprints.persistence.impl.Filter.RedundancyFilter;
+import edu.eci.arsw.blueprints.persistence.impl.Filter.SubsamplingFilter;
 import edu.eci.arsw.blueprints.services.BlueprintsServices;
+import java.util.Arrays;
+import java.util.HashSet;
 
 public class BlueprintsServicesTest {
 
     private BlueprintsServices bps;
+    private RedundancyFilter redundancyFilter;
+    private SubsamplingFilter subsamplingFilter;
 
     @Before
     public void setUp() {
-        // Initialize the BlueprintServices before each test
+        // Crear instancias reales de los filtros y del servicio
+        redundancyFilter = new RedundancyFilter();
+        subsamplingFilter = new SubsamplingFilter();
         bps = new BlueprintsServices();
     }
 
+    // Prueba para añadir un nuevo blueprint
     @Test
     public void testAddNewBlueprint() {
         Blueprint bpD = new Blueprint("Daniel", "plano");
@@ -30,7 +39,7 @@ public class BlueprintsServicesTest {
         }
     }
 
-
+    // Prueba para obtener un blueprint específico
     @Test
     public void testGetBlueprint() {
         Blueprint bpDiego = new Blueprint("Diego", "plano");
@@ -45,6 +54,7 @@ public class BlueprintsServicesTest {
         }
     }
 
+    // Prueba para obtener todos los blueprints
     @Test
     public void testGetAllBlueprints() {
         try {
@@ -60,6 +70,7 @@ public class BlueprintsServicesTest {
         }
     }
 
+    // Prueba para obtener los blueprints de un autor específico
     @Test
     public void testGetBlueprintsByAuthor() {
         try {
@@ -77,12 +88,13 @@ public class BlueprintsServicesTest {
         }
     }
 
+    // Prueba para excepción de blueprints duplicados
     @Test(expected = Exception.class)
     public void testDuplicateBlueprintThrowsException() throws Exception {
         Blueprint bpD = new Blueprint("Daniel", "plano");
         bps.addNewBlueprint(bpD);
-        // Adding the same blueprint should throw an exception
-        bps.addNewBlueprint(bpD);
+        bps.addNewBlueprint(bpD);  // Esto debería lanzar una excepción
     }
-}
 
+    
+}

@@ -5,7 +5,10 @@ import java.util.List;
 
 import edu.eci.arsw.blueprints.model.Blueprint;
 import edu.eci.arsw.blueprints.model.Point;
+import org.springframework.context.annotation.Primary;
+import org.springframework.stereotype.Service;
 
+@Service("redundancyFilter") //bean que puede ser inyectado
 public class RedundancyFilter implements BlueprintFilter {
 
     @Override
@@ -25,6 +28,11 @@ public class RedundancyFilter implements BlueprintFilter {
         }
         
         return new Blueprint(blueprint.getAuthor(), blueprint.getName(), filteredPoints.toArray(new Point[0]));
+    }
+
+    @Override
+    public Blueprint filter(Blueprint bp) {
+        throw new UnsupportedOperationException("Not supported yet."); 
     }
 }
 
